@@ -1,0 +1,24 @@
+# System & Temp
+.DS_Store
+Thumbs.db
+*.log
+.env
+.idea/
+.vscode/
+
+# Scratch & Root duplicate files only
+/example.html
+/details.txt
+/resume_text.txt
+/guitar.png
+/headphones.png
+/keyboard.png
+/amplifier.png
+/watch.png
+/Page 1.png
+/evolve picture.png
+/my picture.jpeg
+/neural_core.jpg
+/cloud_native.jpg
+/healthcare_ai.jpg
+/Ahmad_Aziz_Resume.pdf
