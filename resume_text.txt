@@ -1,0 +1,43 @@
+Ahmad Aziz
+ahmadazizalt@gmail.com  •  Peshawar, KPK, Pakistan  •  linkedin.com/in/ahmadazizktk
+BS Computer Science, UET Peshawar  •  Student ID: 24PWBCS1380
+SUMMARY
+4th-semester Computer Science student at UET Peshawar with hands-on experience across Machine Learning, Data Science, and full-
+stack software engineering (MERN). Certified in Modern AI by Cisco. Builds applied, socially-focused AI and web products end-to-end 
+— from backend architecture and APIs to model integration — and is pursuing deeper research and mentorship en route to a 
+Master's in AI.
+TECHNICAL SKILLS
+▪AI & Machine Learning: Naive Bayes (Gaussian, Multinomial, Bernoulli), KNN, Linear Regression, K-Means Clustering, 
+BFS/DFS/Greedy/A* search, EDA & feature engineering, multilingual NLP (Urdu/Pashto), LLM prompt engineering
+▪Software Engineering & Web Development: React, Redux, Node.js, Express.js, MongoDB (Mongoose), Socket.io, RESTful API 
+design (CRUD, validation, pagination, middleware, error handling), HTML/CSS, Next.js
+▪Languages: Python, JavaScript, Java, C, C++
+▪Data & Backend: MySQL, MongoDB, FastAPI, Redis, JSON-based data persistence, Git/GitHub, Docker
+▪Tools: NumPy, Pandas, Scikit-learn, Matplotlib, Seaborn, Jupyter Notebook
+PROJECTS
+FloodCommand — Autonomous Disaster Response System  |  AtomCamp National AI Hackathon, 2025
+▪Built a 5-agent AI pipeline (Claude Sonnet) that processes Urdu/Pashto WhatsApp distress messages and dispatches NGO rescue 
+teams within 90 seconds
+▪Contributed to agent prompt engineering and multilingual intake testing; deployed live on Vercel
+▪Stack: FastAPI, Redis, Next.js, Twilio, Leaflet.js
+Synapse — Real-Time Communication Platform  |  Web Technologies Course Project
+▪Led backend development for a Discord-inspired, real-time messaging platform (MERN stack) as part of a 4-person team under a 
+tight deadline
+▪Designed REST API endpoints (CRUD, validation, error handling) and real-time messaging with Socket.io
+▪Stack: React, Redux, Node.js, Express.js, MongoDB (Mongoose), Socket.io
+MediGuide — AI Symptom-Triage Chatbot  |  Independent Project
+▪Built a bilingual (English/Urdu) symptom-triage chatbot using Python and the Gemini API to improve healthcare accessibility in 
+Pakistan
+▪Managed the full development lifecycle: environment setup, debugging, and GitHub deployment prep
+AudiWave — Audio-to-Sign-Language Chrome Extension  |  Independent Project
+▪Directed architecture and a phased development roadmap for a real-time Manifest V3 extension translating audio into ASL via an 
+NLP-to-gloss pipeline
+▪Designed a 3D avatar system with sentiment-driven facial expressions supporting multiple sign-language dialects
+EDUCATION
+BS Computer Science  |  University of Engineering & Technology (UET) Peshawar   Oct 2024 – Oct 2028
+▪Relevant Courses: Introduction to Data Science, Applied Linear Algebra, Artificial Intelligence Lab, Web Technologies
+Intermediate (Pre-Medical)  |  Ghulam Ishaq Khan Institute (GIKI)
+CERTIFICATIONS & ACTIVITIES
+▪Introduction to Modern AI — Cisco Networking Academy (Mar 2026)
+▪Co-Chair, Communications — ASME Student Chapter, UET Peshawar
+▪Participant — National AI Hackathon by AtomCamp at IMSciences (2025)
