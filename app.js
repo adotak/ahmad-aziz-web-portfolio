@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initProjectFiltering();
   initSkillsFiltering();
   initKeyboardShortcuts();
+  initTelemetryLiveTicker();
 });
 
 /* ==========================================================================
@@ -99,15 +100,13 @@ function initSkillsFiltering() {
 }
 
 /* ==========================================================================
-   4. Modal Controller (Guaranteed Global Functions)
+   4. Modal Controller
    ========================================================================== */
 function openDemoModal(modalId) {
   const modal = document.getElementById(`modal-${modalId}`);
   if (modal) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
-  } else {
-    console.warn(`Modal modal-${modalId} not found.`);
   }
 }
 
@@ -137,7 +136,152 @@ function initKeyboardShortcuts() {
 }
 
 /* ==========================================================================
-   5. FloodCommand 5-Agent Live Simulation Engine
+   5. Enhanced Live Telemetry & State Machine Engine
+   ========================================================================== */
+function switchTelemetryTab(tabName, btn) {
+  document.querySelectorAll('.telem-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.telemetry-view-pane').forEach(p => p.classList.remove('active'));
+
+  if (btn) btn.classList.add('active');
+  const targetPane = document.getElementById(`pane-${tabName}`);
+  if (targetPane) {
+    targetPane.classList.add('active');
+  }
+}
+
+let pipelineIteration = 1;
+function runLiveAgentPipeline() {
+  const terminal = document.getElementById('telem-terminal-output');
+  const signalsCountEl = document.getElementById('telem-signals-count');
+  const velocityEl = document.getElementById('telem-velocity-val');
+
+  const randomLocations = ['Nowshera Zone A', 'Charsadda Riverbank', 'Swat Valley Sector 3', 'Kabul River Basin'];
+  const loc = randomLocations[Math.floor(Math.random() * randomLocations.length)];
+  const lat = (34.015 + (Math.random() * 0.05)).toFixed(4);
+  const lng = (71.974 + (Math.random() * 0.05)).toFixed(4);
+  const executionMs = (38 + Math.random() * 8).toFixed(1);
+
+  const newLogBlock = document.createElement('div');
+  newLogBlock.style.marginTop = '12px';
+  newLogBlock.style.borderTop = '1px solid rgba(255,255,255,0.08)';
+  newLogBlock.style.paddingTop = '8px';
+
+  newLogBlock.innerHTML = `
+    <div class="telem-log-line gold">[DISPATCH #${pipelineIteration++}] INBOUND TRIGGER → Lat: ${lat}°N, Lng: ${lng}°E (${loc})</div>
+    <div class="telem-log-line green">⚡ [AGENT 1: INTAKE] Tokenizer: Dialect UR/PS | FastText Score: 0.996</div>
+    <div class="telem-log-line cyan">🔍 [AGENT 2: TRIAGE] Hazard: FLASH_FLOOD_STRANDED | Severity: 9.6/10</div>
+    <div class="telem-log-line gold">📍 [AGENT 3: REDIS GEO] Matched Rescue Boat Cluster ID: RESCUE-1122-DELTA</div>
+    <div class="telem-log-line green">🚀 [AGENT 4: DISPATCH] Route confirmed. ETA: ${(3.2 + Math.random() * 1.5).toFixed(1)} mins. Velocity: ${executionMs}ms</div>
+  `;
+
+  terminal.appendChild(newLogBlock);
+  terminal.scrollTop = terminal.scrollHeight;
+
+  if (signalsCountEl) {
+    const current = parseInt(signalsCountEl.textContent.replace(',', '')) || 12842;
+    signalsCountEl.textContent = (current + 1).toLocaleString();
+  }
+  if (velocityEl) {
+    velocityEl.textContent = `0.0${Math.floor(executionMs)}s`;
+  }
+
+  showToast(`Agent Run #${pipelineIteration - 1} Executed in ${executionMs}ms`);
+}
+
+function setNlpExample(text) {
+  const input = document.getElementById('nlp-test-input');
+  if (input) {
+    input.value = text;
+    tokenizeLiveInput();
+  }
+}
+
+function tokenizeLiveInput() {
+  const input = document.getElementById('nlp-test-input');
+  const output = document.getElementById('nlp-terminal-output');
+  if (!input || !output) return;
+
+  const text = input.value.trim();
+  if (!text) return;
+
+  let script = 'English (Latin)';
+  let intent = 'GENERAL_INQUIRY';
+  let severity = 'MODERATE';
+  let hazard = 'Weather Event';
+  let tokens = [];
+
+  if (/[\u0600-\u06FF]/.test(text)) {
+    if (text.includes('د') || text.includes('پاتې') || text.includes('ننوتي') || text.includes('او')) {
+      script = 'Pashto (Eastern Iranian)';
+      intent = 'EMERGENCY_ROOFTOP_STRANDED';
+      severity = 'CRITICAL';
+      hazard = 'FlashFlood Entrapment';
+      tokens = text.split(/\s+/).slice(0, 6);
+    } else {
+      script = 'Urdu (Perso-Arabic)';
+      intent = 'EMERGENCY_RESCUE_DISPATCH';
+      severity = 'CRITICAL_HIGH';
+      hazard = 'Water Ingress & Stranded Victims';
+      tokens = text.split(/\s+/).slice(0, 6);
+    }
+  } else {
+    tokens = text.split(/\s+/).slice(0, 6);
+    if (text.toLowerCase().includes('flood') || text.toLowerCase().includes('emergency') || text.toLowerCase().includes('rescue')) {
+      intent = 'EMERGENCY_RESCUE_DISPATCH';
+      severity = 'HIGH';
+      hazard = 'Infrastructure Washout';
+    }
+  }
+
+  const tokenString = JSON.stringify(tokens);
+
+  output.innerHTML = `
+    <div class="telem-log-line gold">[TOKENIZER RESULTS FOR: "${text}"]:</div>
+    <div class="telem-log-line cyan">• Detected Language: ${script} | Tokenizer Confidence: 99.7%</div>
+    <div class="telem-log-line green">• Subword Tokens: ${tokenString}</div>
+    <div class="telem-log-line gold">• Intent Classification: ${intent} (Confidence: 0.993)</div>
+    <div class="telem-log-line green">• Extracted Entities: { HAZARD: '${hazard}', SEVERITY: '${severity}', TIMESTAMP: '${new Date().toLocaleTimeString()}' }</div>
+    <div class="telem-log-line dim">• Transformer Inference: ${(12 + Math.random() * 5).toFixed(1)}ms | Zero Cache Misses</div>
+  `;
+
+  showToast('NLP Tokenization Complete');
+}
+
+function simulateClusterLoad() {
+  const terminal = document.getElementById('cluster-terminal-output');
+  const podCountEl = document.getElementById('k8s-pod-count');
+  const wsCountEl = document.getElementById('k8s-ws-count');
+  const cpuValEl = document.getElementById('k8s-cpu-val');
+
+  if (terminal) {
+    terminal.innerHTML += `
+      <div class="telem-log-line gold" style="margin-top: 8px;">⚡ [LOAD STIMULUS]: Injecting 15,000 concurrent WebSocket connections...</div>
+      <div class="telem-log-line cyan">• [KUBERNETES HPA]: Horizontal Pod Autoscaler triggered (+6 pods provisioned).</div>
+      <div class="telem-log-line green">• [REDIS CLUSTER]: Ingress 48.2k ops/s | P99 Latency: 9.4ms | 0 packet loss.</div>
+      <div class="telem-log-line green">✓ [STATUS]: Ingress stabilized across 18 pods. System nominal.</div>
+    `;
+    terminal.scrollTop = terminal.scrollHeight;
+  }
+
+  if (podCountEl) podCountEl.textContent = '18 Pods Running (Autoscaled)';
+  if (wsCountEl) wsCountEl.textContent = '4,280 Active';
+  if (cpuValEl) cpuValEl.textContent = '42.8%';
+
+  showToast('Cluster Stress Test Passed (100% SLA)');
+}
+
+function initTelemetryLiveTicker() {
+  const latencyEl = document.getElementById('telem-latency-val');
+  setInterval(() => {
+    if (latencyEl) {
+      const ms = Math.floor(11 + Math.random() * 4);
+      latencyEl.textContent = `${ms}ms`;
+    }
+  }, 2200);
+}
+
+/* ==========================================================================
+   6. FloodCommand 5-Agent Live Simulation Engine
    ========================================================================== */
 let isFloodSimRunning = false;
 
@@ -184,7 +328,7 @@ function runFloodSim(type) {
 }
 
 /* ==========================================================================
-   6. MediGuide Symptom Triage Chatbot Simulator
+   7. MediGuide Symptom Triage Chatbot Simulator
    ========================================================================== */
 let currentChatLang = 'en';
 
@@ -254,7 +398,7 @@ function sendMediGuideMessage() {
 }
 
 /* ==========================================================================
-   7. AudiWave Audio-to-Sign-Language Visualizer
+   8. AudiWave Audio-to-Sign-Language Visualizer
    ========================================================================== */
 let isAudioSimActive = false;
 let audioSimInterval = null;
@@ -295,7 +439,7 @@ function toggleAudioWaveSim() {
 }
 
 /* ==========================================================================
-   8. Cluster & Telemetry Simulation Testers
+   9. Cluster & Telemetry Simulation Testers
    ========================================================================== */
 function runClusterStressTest() {
   const feed = document.getElementById('cluster-feed');
@@ -320,7 +464,7 @@ function runOrionScan() {
 }
 
 /* ==========================================================================
-   9. Clipboard Copy & Toast Feedback
+   10. Clipboard Copy & Toast Feedback
    ========================================================================== */
 function copyToClipboard(text, successMsg) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -360,7 +504,7 @@ function showToast(message) {
 }
 
 /* ==========================================================================
-   10. Contact Form Transmission Handler
+   11. Contact Form Transmission Handler
    ========================================================================== */
 function handleContactSubmit(event) {
   event.preventDefault();
@@ -381,6 +525,11 @@ function handleContactSubmit(event) {
 window.openDemoModal = openDemoModal;
 window.closeDemoModal = closeDemoModal;
 window.handleBackdropClick = handleBackdropClick;
+window.switchTelemetryTab = switchTelemetryTab;
+window.runLiveAgentPipeline = runLiveAgentPipeline;
+window.setNlpExample = setNlpExample;
+window.tokenizeLiveInput = tokenizeLiveInput;
+window.simulateClusterLoad = simulateClusterLoad;
 window.runFloodSim = runFloodSim;
 window.setChatLang = setChatLang;
 window.fillMediPrompt = fillMediPrompt;
