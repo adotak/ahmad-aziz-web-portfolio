@@ -774,7 +774,7 @@ async def orchestrate_distress_pipeline(sos_payload: RawSOS):<br>
             <div>
               <label class="copy-mini-label" style="display: block; margin-bottom: 8px;">Agent Execution Log:</label>
               <div class="font-mono" id="flood-feed" style="background: #040508; border-radius: var(--radius-xs); padding: 12px; height: 190px; overflow-y: auto; font-size: 0.76rem; border: 1px solid rgba(255,255,255,0.05);">
-                <div style="color: var(--text-dim);">[SYSTEM] Waiting for inbound SOS trigger...</div>
+                <div style="color: var(--text-dim);">[SYSTEM] Click a distress message to start agent simulation...</div>
               </div>
             </div>
           </div>
@@ -845,6 +845,12 @@ async def orchestrate_distress_pipeline(sos_payload: RawSOS):<br>
             Simulate real-time tab audio stream transcription into American Sign Language (ASL) grammatical gloss tokens:
           </p>
 
+          <div class="wave-visualizer-box" id="wave-bars-box">
+            <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+            <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+            <div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div>
+          </div>
+
           <div class="font-mono" id="asl-output" style="padding: 16px; border-radius: var(--radius-xs); background: rgba(79, 209, 197, 0.08); border: 1px solid rgba(79, 209, 197, 0.2); font-size: 0.92rem; color: var(--cyan-primary); margin-bottom: 16px;">
             [ASL GLOSS STREAM]: PRESS START TO TRANSLATE AUDIO
           </div>
@@ -875,6 +881,20 @@ async def orchestrate_distress_pipeline(sos_payload: RawSOS):<br>
         <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 16px;">
           Designed for high-concurrency microservices, containerization with Docker, and Kubernetes deployment specs for the CNCF Peshawar developer ecosystem.
         </p>
+
+        <!-- Live Cluster Simulation -->
+        <div style="background: #080a0f; border-radius: var(--radius-sm); border: 1px solid var(--border-hairline); padding: 18px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="copy-mini-label">Cluster Health & Node Telemetry</span>
+            <button class="btn-ghost btn-sm" onclick="runClusterStressTest()">Run Ingress Benchmark</button>
+          </div>
+          <div class="font-mono" id="cluster-feed" style="font-size: 0.78rem; color: var(--cyan-primary); line-height: 1.6;">
+            • Kubernetes Pods: 6 Active / 0 Restarting<br>
+            • Ingress Latency: 12ms avg (Redis Cache Hit 98.2%)<br>
+            • Active WebSocket Channels: 1,420 Connected
+          </div>
+        </div>
+
         <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-hairline);">
           <strong style="color: var(--text-pure);">⚡ Highlights:</strong> Sub-50ms message latency, Redis in-memory cache, JWT authentication, and automated GitHub Actions CI/CD workflows.
         </div>
@@ -899,6 +919,18 @@ async def orchestrate_distress_pipeline(sos_payload: RawSOS):<br>
         <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 16px;">
           ORION integrates deep sensor telemetry anomaly detection with a retrieval-augmented generation (RAG) assistant to diagnose operational mechanical failures in real-time.
         </p>
+
+        <!-- Live Orion Telemetry Test -->
+        <div style="background: #080a0f; border-radius: var(--radius-sm); border: 1px solid var(--border-hairline); padding: 18px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="copy-mini-label">Sensor Telemetry Scanner</span>
+            <button class="btn-solid btn-sm" onclick="runOrionScan()">Simulate Thermal Anomaly</button>
+          </div>
+          <div class="font-mono" id="orion-telemetry-feed" style="font-size: 0.78rem; color: var(--gold-primary); line-height: 1.6;">
+            [STATUS]: Sensor stream stable (Drill temp: 64°C • Vibration: 0.02g • Pressure: 1,200 PSI)<br>
+            [RAG LLM]: Ready for diagnostics inquiry.
+          </div>
+        </div>
       </div>
     </div>
   </div>

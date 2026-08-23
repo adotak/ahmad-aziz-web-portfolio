@@ -1,5 +1,5 @@
 /**
- * Ahmad Aziz — Portfolio High-Craft Interactive System
+ * Ahmad Aziz — Portfolio High-Craft Interactive System & Project Simulators
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,14 +18,12 @@ function initNavbarScroll() {
   const navLinks = document.querySelectorAll('.nav-item-link');
 
   window.addEventListener('scroll', () => {
-    // Header shadow & background blur on scroll
     if (window.scrollY > 30) {
       header.classList.add('scrolled');
     } else {
       header.classList.remove('scrolled');
     }
 
-    // Active Section Spy
     let current = '';
     sections.forEach(section => {
       const sectionTop = section.offsetTop - 120;
@@ -45,7 +43,7 @@ function initNavbarScroll() {
 }
 
 /* ==========================================================================
-   2. Project Filtering
+   2. Project Category Filtering
    ========================================================================== */
 function initProjectFiltering() {
   const filterChips = document.querySelectorAll('.filter-chip');
@@ -63,7 +61,6 @@ function initProjectFiltering() {
         if (filter === 'all' || categories.includes(filter)) {
           card.style.display = 'flex';
           card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
         } else {
           card.style.display = 'none';
           card.style.opacity = '0';
@@ -102,13 +99,15 @@ function initSkillsFiltering() {
 }
 
 /* ==========================================================================
-   4. Interactive Modals Controller
+   4. Modal Controller (Guaranteed Global Functions)
    ========================================================================== */
 function openDemoModal(modalId) {
   const modal = document.getElementById(`modal-${modalId}`);
   if (modal) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+  } else {
+    console.warn(`Modal modal-${modalId} not found.`);
   }
 }
 
@@ -151,15 +150,15 @@ function runFloodSim(type) {
 
   const steps = [
     { text: `[WEBHOOK] Inbound WhatsApp message received via Twilio endpoint.`, delay: 200, color: '#e6c387' },
-    { text: `[AGENT 1: INTAKE] Detecting dialect & tokenizing raw text...`, delay: 700, color: '#cbd5e0' },
-    { text: `[AGENT 1] Dialect: ${type.toUpperCase()} | Confidence: 99.4%`, delay: 1200, color: '#68d391' },
-    { text: `[AGENT 2: TRIAGE] Extracting distress parameters: Flood water ingress, rooftop entrapment.`, delay: 1800, color: '#cbd5e0' },
-    { text: `[AGENT 2] Severity Score: 9.4/10 [CRITICAL_IMMEDIATE]`, delay: 2400, color: '#4fd1c5' },
-    { text: `[AGENT 3: GEOSPATIAL] Resolving coordinates & querying Redis spatial index...`, delay: 3000, color: '#cbd5e0' },
-    { text: `[AGENT 3] Location: 34.0151° N, 71.9747° E (Nowshera Zone B). Proximity cluster identified.`, delay: 3600, color: '#68d391' },
-    { text: `[AGENT 4: DISPATCH] Locating nearest rescue unit with motorized inflatable boat.`, delay: 4200, color: '#cbd5e0' },
-    { text: `[AGENT 4] Assigned: Rescue Unit 1122 - Alpha 4 (ETA: 4.2 mins). Automated dispatch sent.`, delay: 4800, color: '#4fd1c5' },
-    { text: `[AGENT 5: AUDIT] Mission logged to persistent ledger. Dispatch completed in 1.4 seconds.`, delay: 5400, color: '#68d391' }
+    { text: `[AGENT 1: INTAKE] Detecting dialect & tokenizing raw text...`, delay: 600, color: '#cbd5e0' },
+    { text: `[AGENT 1] Dialect: ${type.toUpperCase()} | Confidence: 99.4%`, delay: 1100, color: '#68d391' },
+    { text: `[AGENT 2: TRIAGE] Distress: Flood water ingress, rooftop entrapment.`, delay: 1600, color: '#cbd5e0' },
+    { text: `[AGENT 2] Severity Score: 9.4/10 [CRITICAL_IMMEDIATE]`, delay: 2100, color: '#4fd1c5' },
+    { text: `[AGENT 3: GEOSPATIAL] Resolving coordinates & querying Redis spatial index...`, delay: 2600, color: '#cbd5e0' },
+    { text: `[AGENT 3] Location: 34.0151° N, 71.9747° E (Nowshera Zone B). Proximity cluster identified.`, delay: 3100, color: '#68d391' },
+    { text: `[AGENT 4: DISPATCH] Locating nearest rescue unit with motorized inflatable boat.`, delay: 3600, color: '#cbd5e0' },
+    { text: `[AGENT 4] Assigned: Rescue Unit 1122 - Alpha 4 (ETA: 4.2 mins). Automated dispatch sent.`, delay: 4100, color: '#4fd1c5' },
+    { text: `[AGENT 5: AUDIT] Mission logged to persistent ledger. Dispatch completed in 1.4 seconds.`, delay: 4600, color: '#68d391' }
   ];
 
   let currentStep = 0;
@@ -216,7 +215,7 @@ function sendMediGuideMessage() {
   const userBubble = document.createElement('div');
   userBubble.style.background = 'linear-gradient(135deg, #e6c387, #b08d46)';
   userBubble.style.color = '#07080b';
-  userBubble.style.fontWeight = '500';
+  userBubble.style.fontWeight = '600';
   userBubble.style.padding = '10px 14px';
   userBubble.style.borderRadius = '12px';
   userBubble.style.fontSize = '0.85rem';
@@ -251,7 +250,7 @@ function sendMediGuideMessage() {
 
     messages.appendChild(botBubble);
     messages.scrollTop = messages.scrollHeight;
-  }, 500);
+  }, 450);
 }
 
 /* ==========================================================================
@@ -272,14 +271,17 @@ const aslGlossPhrases = [
 function toggleAudioWaveSim() {
   const btn = document.getElementById('audiwave-toggle-btn');
   const output = document.getElementById('asl-output');
+  const bars = document.querySelectorAll('#wave-bars-box .audio-bar');
 
   if (isAudioSimActive) {
     isAudioSimActive = false;
     clearInterval(audioSimInterval);
+    bars.forEach(bar => bar.classList.remove('active'));
     btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> Start Audio Stream Simulation`;
     output.textContent = '[ASL GLOSS STREAM]: STREAM PAUSED';
   } else {
     isAudioSimActive = true;
+    bars.forEach(bar => bar.classList.add('active'));
     btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="14" height="14" x="5" y="5" rx="2"/></svg> Pause Audio Stream`;
 
     let phraseIdx = 0;
@@ -288,12 +290,37 @@ function toggleAudioWaveSim() {
     audioSimInterval = setInterval(() => {
       phraseIdx = (phraseIdx + 1) % aslGlossPhrases.length;
       output.textContent = aslGlossPhrases[phraseIdx];
-    }, 2200);
+    }, 2000);
   }
 }
 
 /* ==========================================================================
-   8. Clipboard Copy & Toast Feedback
+   8. Cluster & Telemetry Simulation Testers
+   ========================================================================== */
+function runClusterStressTest() {
+  const feed = document.getElementById('cluster-feed');
+  feed.innerHTML = `
+    • [INGRESS STRESS TEST] Simulating 10,000 req/sec load...<br>
+    • [KUBERNETES AUTOSCALER] Scaled from 6 to 18 Pods (Zero dropped packets)<br>
+    • [REDIS BENCHMARK] Mean latency: 8.4ms | Throughput: 42,000 ops/sec<br>
+    • <strong style="color: #68d391;">STATUS: CLUSTER OPTIMAL (100% HEALTH SCORE)</strong>
+  `;
+  showToast('Cluster Benchmark Complete');
+}
+
+function runOrionScan() {
+  const feed = document.getElementById('orion-telemetry-feed');
+  feed.innerHTML = `
+    ⚠️ [ANOMALY DETECTED]: Drill Bit 4B Thermal Spike (+32°C over baseline)<br>
+    🔍 [RAG QUERY]: Searching Rig Maintenance Manual (Section 8.4 - Thermal Thresholds)...<br>
+    🤖 [RAG DIAGNOSIS]: Recommend cooling pump flow rate increase by 15% and 200 RPM reduction to prevent seal failure.<br>
+    • <strong style="color: #4fd1c5;">ACTION DISPATCHED TO RIG TELEMETRY BUS</strong>
+  `;
+  showToast('Orion RAG Diagnosis Generated');
+}
+
+/* ==========================================================================
+   9. Clipboard Copy & Toast Feedback
    ========================================================================== */
 function copyToClipboard(text, successMsg) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -333,7 +360,7 @@ function showToast(message) {
 }
 
 /* ==========================================================================
-   9. Contact Form Transmission Handler
+   10. Contact Form Transmission Handler
    ========================================================================== */
 function handleContactSubmit(event) {
   event.preventDefault();
@@ -349,3 +376,17 @@ function handleContactSubmit(event) {
     document.getElementById('portfolio-contact-form').reset();
   }, 800);
 }
+
+// Attach all functions to window for 100% inline accessibility
+window.openDemoModal = openDemoModal;
+window.closeDemoModal = closeDemoModal;
+window.handleBackdropClick = handleBackdropClick;
+window.runFloodSim = runFloodSim;
+window.setChatLang = setChatLang;
+window.fillMediPrompt = fillMediPrompt;
+window.sendMediGuideMessage = sendMediGuideMessage;
+window.toggleAudioWaveSim = toggleAudioWaveSim;
+window.runClusterStressTest = runClusterStressTest;
+window.runOrionScan = runOrionScan;
+window.copyToClipboard = copyToClipboard;
+window.handleContactSubmit = handleContactSubmit;

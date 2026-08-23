@@ -1082,26 +1082,28 @@ textarea.form-control-input {
 }
 
 /* ==========================================================================
-   Modals & Simulators
+   Modals & Interactive Simulators (Rock Solid Styling)
    ========================================================================== */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(4, 5, 8, 0.88);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  z-index: 1000;
+  background: rgba(3, 4, 7, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
   opacity: 0;
+  pointer-events: none;
   visibility: hidden;
   transition: opacity var(--ease-snappy), visibility var(--ease-snappy);
 }
 
 .modal-backdrop.active {
   opacity: 1;
+  pointer-events: auto;
   visibility: visible;
 }
 
@@ -1109,19 +1111,19 @@ textarea.form-control-input {
   width: 100%;
   max-width: 840px;
   max-height: 90vh;
-  background: var(--bg-surface);
+  background: #0d1017;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-floating);
+  box-shadow: var(--shadow-floating), 0 0 50px rgba(0, 0, 0, 0.85);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transform: scale(0.96);
+  transform: scale(0.96) translateY(10px);
   transition: transform var(--ease-snappy);
 }
 
 .modal-backdrop.active .modal-window {
-  transform: scale(1);
+  transform: scale(1) translateY(0);
 }
 
 .modal-header {
@@ -1130,7 +1132,7 @@ textarea.form-control-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--bg-surface-raised);
+  background: #131722;
 }
 
 .modal-header h3 {
@@ -1140,21 +1142,23 @@ textarea.form-control-input {
 }
 
 .modal-close-icon-btn {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border-hairline);
   color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: all var(--ease-snappy);
 }
 
 .modal-close-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.16);
   color: #fff;
+  transform: rotate(90deg);
 }
 
 .modal-scroll-area {
@@ -1163,12 +1167,39 @@ textarea.form-control-input {
   flex-grow: 1;
 }
 
+/* Audio wave bars */
+.wave-visualizer-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 80px;
+  margin: 16px 0;
+}
+
+.audio-bar {
+  width: 6px;
+  height: 16px;
+  border-radius: 3px;
+  background: var(--cyan-primary);
+  transition: height 0.15s ease;
+}
+
+.audio-bar.active {
+  animation: barBounce 0.7s infinite alternate ease-in-out;
+}
+
+@keyframes barBounce {
+  0% { height: 12px; opacity: 0.4; }
+  100% { height: 65px; opacity: 1; background: var(--gold-primary); }
+}
+
 /* Toast */
 .toast-container {
   position: fixed;
   bottom: 28px;
   right: 28px;
-  z-index: 2000;
+  z-index: 10000;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1187,6 +1218,12 @@ textarea.form-control-input {
   align-items: center;
   gap: 10px;
   box-shadow: var(--shadow-elevated);
+  animation: toastPop 0.3s forwards;
+}
+
+@keyframes toastPop {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive */
