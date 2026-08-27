@@ -8,7 +8,25 @@ document.addEventListener('DOMContentLoaded', () => {
   initSkillsFiltering();
   initKeyboardShortcuts();
   initTelemetryLiveTicker();
+  initFooterMeta();
 });
+
+function initFooterMeta() {
+  const footerYear = document.getElementById('footer-year');
+  if (footerYear) {
+    footerYear.textContent = new Date().getFullYear();
+  }
+
+  const statusEl = document.getElementById('availability-status');
+  if (statusEl) {
+    const now = new Date();
+    const month = now.getMonth();
+    const statusText = month >= 8 && month <= 11
+      ? 'Available for AI engineering collaborations and prototype builds.'
+      : 'Booking select AI engineering collaborations for the next cycle.';
+    statusEl.textContent = statusText;
+  }
+}
 
 /* ==========================================================================
    1. Navbar Scroll & Active Link Spy
