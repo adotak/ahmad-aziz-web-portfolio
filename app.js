@@ -2,6 +2,8 @@
  * Ahmad Aziz — Portfolio High-Craft Interactive System & Project Simulators
  */
 
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
   initProjectFiltering();
@@ -9,6 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initKeyboardShortcuts();
   initTelemetryLiveTicker();
   initFooterMeta();
+  initScrollProgress();
+  initMobileNav();
+  initRoleTicker();
+  initHeroTilt();
+  initRevealAnimations();
+  initSpotlightCards();
+  initBackToTop();
 });
 
 function initFooterMeta() {
@@ -482,7 +491,254 @@ function runOrionScan() {
 }
 
 /* ==========================================================================
-   10. Clipboard Copy & Toast Feedback
+   10. Scroll Progress Bar
+   ========================================================================== */
+function initScrollProgress() {
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+
+  const update = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = max > 0 ? window.scrollY / max : 0;
+    bar.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
+  };
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+}
+
+/* ==========================================================================
+   11. Mobile Navigation
+   ========================================================================== */
+function initMobileNav() {
+  const toggle = document.getElementById('nav-toggle');
+  const nav = document.getElementById('mobile-nav');
+  if (!toggle || !nav) return;
+
+  const setOpen = (open) => {
+    toggle.classList.toggle('open', open);
+    nav.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    nav.setAttribute('aria-hidden', String(!open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+
+  toggle.addEventListener('click', () => setOpen(!nav.classList.contains('open')));
+
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('open')) setOpen(false);
+  });
+}
+
+/* ==========================================================================
+   12. Hero Role Ticker (Typewriter)
+   ========================================================================== */
+function initRoleTicker() {
+  const el = document.getElementById('role-ticker-text');
+  if (!el) return;
+
+  const roles = [
+    'Associate AI Engineer',
+    'Multi-Agent Systems Builder',
+    'CNCF Peshawar Co-Founder',
+    'Low-Resource NLP Developer',
+    'Full-Stack Cloud Engineer'
+  ];
+
+  if (prefersReducedMotion) {
+    el.textContent = roles[0];
+    return;
+  }
+
+  let roleIdx = 0;
+  let charIdx = roles[0].length;
+  let deleting = true;
+
+  function tick() {
+    const current = roles[roleIdx];
+
+    if (deleting) {
+      charIdx--;
+      el.textContent = current.slice(0, charIdx);
+      if (charIdx === 0) {
+        deleting = false;
+        roleIdx = (roleIdx + 1) % roles.length;
+        setTimeout(tick, 350);
+        return;
+      }
+      setTimeout(tick, 32);
+    } else {
+      charIdx++;
+      el.textContent = roles[roleIdx].slice(0, charIdx);
+      if (charIdx === roles[roleIdx].length) {
+        deleting = true;
+        setTimeout(tick, 2400);
+        return;
+      }
+      setTimeout(tick, 58);
+    }
+  }
+
+  setTimeout(tick, 2200);
+}
+
+/* ==========================================================================
+   13. Hero Card 3D Tilt
+   ========================================================================== */
+function initHeroTilt() {
+  const card = document.getElementById('hero-visual-card');
+  if (!card || prefersReducedMotion) return;
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(900px) rotateY(${px * 7}deg) rotateX(${-py * 7}deg)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+
+  card.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+}
+
+/* ==========================================================================
+   14. Scroll-Reveal & Animated Counters & Skill Bars
+   ========================================================================== */
+function initRevealAnimations() {
+  const revealSelectors = [
+    '.section-label',
+    '.section-title',
+    '.section-subtitle',
+    '.bento-card',
+    '.studio-project-card',
+    '.studio-skill-card',
+    '.timeline-block',
+    '.contact-studio-panel',
+    '.telemetry-console-wrapper',
+    '.hero-layout > div',
+    '.hero-stats-bar .stat-box'
+  ];
+
+  const targets = document.querySelectorAll(revealSelectors.join(','));
+
+  if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+    animateCounters();
+    return;
+  }
+
+  // Prepare skill bars for width animation
+  document.querySelectorAll('.studio-skill-card').forEach(card => {
+    const fill = card.querySelector('.skill-fill-line');
+    if (fill) {
+      fill.dataset.finalWidth = fill.style.width;
+      fill.style.width = '0%';
+    }
+  });
+
+  targets.forEach(el => {
+    el.classList.add('reveal');
+    // Stagger siblings within the same parent
+    const idx = Array.from(el.parentElement.children).indexOf(el);
+    el.style.transitionDelay = `${Math.min(idx, 5) * 70}ms`;
+  });
+
+  let countersFired = false;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('in-view');
+
+      const fill = entry.target.querySelector('.skill-fill-line');
+      if (fill && fill.dataset.finalWidth) {
+        fill.style.width = fill.dataset.finalWidth;
+      }
+
+      if (!countersFired && entry.target.closest('.hero-stats-bar')) {
+        countersFired = true;
+        animateCounters();
+      }
+
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+  targets.forEach(el => observer.observe(el));
+}
+
+function animateCounters() {
+  document.querySelectorAll('.count-up').forEach(el => {
+    const target = parseInt(el.dataset.target, 10);
+    if (isNaN(target)) return;
+
+    if (prefersReducedMotion) {
+      el.textContent = target;
+      return;
+    }
+
+    const duration = 1400;
+    const start = performance.now();
+
+    function step(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(target * eased);
+      if (t < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  });
+}
+
+/* ==========================================================================
+   15. Spotlight Card Hover (mouse-tracked glow)
+   ========================================================================== */
+function initSpotlightCards() {
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  const cards = document.querySelectorAll([
+    '.studio-project-card',
+    '.bento-card',
+    '.studio-skill-card',
+    '.contact-studio-panel',
+    '.timeline-content-card'
+  ].join(','));
+
+  cards.forEach(card => {
+    card.classList.add('spotlight');
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--sx', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--sy', `${e.clientY - rect.top}px`);
+    });
+  });
+}
+
+/* ==========================================================================
+   16. Back to Top
+   ========================================================================== */
+function initBackToTop() {
+  const btn = document.getElementById('back-to-top');
+  if (!btn) return;
+
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('show', window.scrollY > 640);
+  }, { passive: true });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+  });
+}
+
+/* ==========================================================================
+   17. Clipboard Copy & Toast Feedback
    ========================================================================== */
 function copyToClipboard(text, successMsg) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
