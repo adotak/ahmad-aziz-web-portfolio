@@ -8,6 +8,7 @@ An ultra-modern, high-craft web portfolio showcasing applied machine learning sy
 
 ## ⚡ Key Highlights & Systems
 
+- **VitaDrive**: Production car-vitals SaaS live at [vitadrive.vercel.app](https://vitadrive.vercel.app) — real-time telemetry ingestion, predictive maintenance forecasting, and PyTorch anomaly detection behind Clerk auth.
 - **FloodCommand (AtomCamp National AI Hackathon)**: 5-Agent autonomous disaster response pipeline parsing multilingual Urdu/Pashto WhatsApp SOS messages and dispatching rescue boats in under 90 seconds.
 - **MediGuide**: Bilingual (Urdu/English) clinical symptom-triage chatbot with real-time red-flag escalation warnings.
 - **AudiWave**: Manifest V3 Chrome Extension converting browser audio streams to American Sign Language (ASL) gloss tokens.
@@ -23,6 +24,14 @@ An ultra-modern, high-craft web portfolio showcasing applied machine learning sy
 - **Typography**: Plus Jakarta Sans, Outfit, Instrument Serif, Space Grotesk
 - **Assets**: Optimized High-Resolution 3D Telemetry Graphics
 
+## ✨ Experience Layer
+
+- Scroll progress bar, IntersectionObserver scroll-reveal, cursor spotlight glow on cards
+- Typewriter hero role ticker, count-up stats, floating tech chips, aurora glow, mouse-tilt
+- Infinite tech marquee, back-to-top button, animated skill bars
+- Full mobile navigation (hamburger + overlay) — responsive below 768px
+- `prefers-reduced-motion` honored site-wide; lazy-loaded project imagery
+
 ---
 
 ## 📂 Project Directory Structure
@@ -37,7 +46,8 @@ An ultra-modern, high-craft web portfolio showcasing applied machine learning sy
 │       ├── cloud_native.jpg
 │       ├── healthcare_ai.jpg
 │       ├── audiwave_preview.png
-│       └── orion_suite.png
+│       ├── orion_suite.png
+│       └── vitadrive_preview.png
 ├── index.html
 ├── styles.css
 ├── app.js
